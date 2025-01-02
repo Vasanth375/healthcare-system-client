@@ -1,9 +1,9 @@
-name: Deploy Frontend to Vercel 
+name: Deploy Frontend to Vercel
 
 on:
   push:
     paths:
-      - 'client/**'
+      - '**'
     branches:
       - main
   workflow_dispatch:
@@ -13,18 +13,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Check out the code
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      # Step 2: Install dependencies and build the React app
       - name: Install Dependencies and Build
         run: |
-          cd client
           npm install
           npm run build
 
+      # Step 3: Deploy to Vercel
       - name: Deploy to Vercel
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_AUTH_TOKEN }}
         run: |
-          cd client
           npx vercel --prod --token $VERCEL_TOKEN
