@@ -1,0 +1,30 @@
+name: Deploy Frontend to Vercel
+
+on:
+  push:
+    paths:
+      - 'client/**'
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies and Build
+        run: |
+          cd client
+          npm install
+          npm run build
+
+      - name: Deploy to Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_AUTH_TOKEN }}
+        run: |
+          cd client
+          npx vercel --prod --token $VERCEL_TOKEN
